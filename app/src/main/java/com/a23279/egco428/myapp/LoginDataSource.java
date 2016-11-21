@@ -53,6 +53,25 @@ public class LoginDataSource {
         database.delete(MySQLiteHelper.TABLE_LOGIN,MySQLiteHelper.COLUMN_ID+" = "+id,null); // (comment,_id = id,null)
     }
 
+    public String findpass(String un){
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + MySQLiteHelper.TABLE_LOGIN
+                + " WHERE " + MySQLiteHelper.COLUMN_USERNAME + "=" + "'"+un+"'", null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return "";
+        }
+        else {
+            LoginMessage newComment = cursorToComment(cursor);
+            String p = newComment.getPassword();
+            cursor.close();
+            return p;
+        }
+
+    }
+
 
     // open program and load all comment
     public List<LoginMessage> getAllComments(){
